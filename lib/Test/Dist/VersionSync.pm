@@ -14,11 +14,11 @@ Test::Dist::VersionSync - Verify that all the modules in a distribution have the
 
 =head1 VERSION
 
-Version 1.0.1
+Version 1.0.2
 
 =cut
 
-our $VERSION = '1.0.1';
+our $VERSION = '1.0.2';
 
 
 =head1 SYNOPSIS
@@ -86,11 +86,11 @@ sub ok_versions
 		Test::More::plan( tests => 3 )
 			unless $plan_declared;
 		
-		$return &&= Test::More::isa_ok(
+		$return = Test::More::isa_ok(
 			$modules,
 			'ARRAY',
 			'modules list',
-		);
+		) && $return;
 	}
 	else
 	{
@@ -109,7 +109,7 @@ sub ok_versions
 		) if scalar( @$modules ) == 0;
 		
 		my $versions = {};
-		$return &&= Test::More::subtest(
+		$return = Test::More::subtest(
 			'Retrieve versions for all modules listed.',
 			sub
 			{
@@ -132,13 +132,17 @@ sub ok_versions
 					push( @{ $versions->{ $version } }, $module );
 				}
 			}
-		);
+		) && $return;
 		
-		$return &&= is(
+		my $has_only_one_version = is(
 			scalar( keys %$versions ),
 			1,
 			'The modules declare only one version.',
-		) || diag( 'Versions and the modules they were found in: ' . Dumper( $versions ) );
+		);
+		diag( 'Versions and the modules they were found in: ' . Dumper( $versions ) )
+			unless $has_only_one_version;
+		$return = $has_only_one_version && $has_only_one_version;
+		
 	}
 
 	return $return;
@@ -197,21 +201,24 @@ sub _get_modules_from_manifest
 	my $excluded_patterns;
 	if ( -e 'MANIFEST.SKIP' )
 	{
-		Test::More::ok(
+		my $opened_manifest_skip = Test::More::ok(
 			open( my $MANIFESTSKIP, '<', 'MANIFEST.SKIP' ),
 			'Retrieve MANIFEST.SKIP file.',
 		) || diag( "Failed to open < MANIFEST.SKIP file: $!." );
 		
-		my $exclusions = [];
-		while ( my $pattern = <$MANIFESTSKIP> )
+		if ( $opened_manifest_skip )
 		{
-			chomp( $pattern );
-			push( @$exclusions, $pattern );
+			my $exclusions = [];
+			while ( my $pattern = <$MANIFESTSKIP> )
+			{
+				chomp( $pattern );
+				push( @$exclusions, $pattern );
+			}
+			close( $MANIFESTSKIP );
+			
+			$excluded_patterns = '(' . join( '|', @$exclusions ) . ')'
+				if scalar( @$exclusions ) != 0;
 		}
-		close( $MANIFESTSKIP );
-		
-		$excluded_patterns = '(' . join( '|', @$exclusions ) . ')'
-			if scalar( @$exclusions ) != 0;
 	}
 	else
 	{
@@ -221,29 +228,42 @@ sub _get_modules_from_manifest
 		);
 	}
 	
-	# Retrieve the list of modules in MANIFEST.
-	Test::More::ok(
+	# Make sure that there is a MANIFEST file at the root of the distribution,
+	# before we even open it.
+	my $manifest_exists = Test::More::ok(
 		-e 'MANIFEST',
 		'The MANIFEST file is present at the root of the distribution.',
 	);
 	
-	Test::More::ok(
-		open( my $MANIFEST, '<', 'MANIFEST' ),
-		'Retrieve MANIFEST file.',
-	) || diag( "Failed to open < MANIFEST file: $!." );
-	
+	# Retrieve the list of modules in MANIFEST.
 	my $modules = [];
-	while ( my $file = <$MANIFEST> )
+	SKIP:
 	{
-		chomp( $file );
-		next if defined( $excluded_patterns ) && $file =~ /$excluded_patterns/;
-		next unless $file =~ m/^lib[\\\/](.*)\.pm$/;
+		Test::More::skip(
+			'MANIFEST is missing, cannot retrieve list of files.',
+			1,
+		) unless $manifest_exists;
+	
+		my $opened_manifest = Test::More::ok(
+			open( my $MANIFEST, '<', 'MANIFEST' ),
+			'Retrieve MANIFEST file.',
+		) || diag( "Failed to open < MANIFEST file: $!." );
 		
-		my $module = $1;
-		$module =~ s/[\\\/]/::/g;
-		push( @$modules, $module );
+		if ( $opened_manifest )
+		{
+			while ( my $file = <$MANIFEST> )
+			{
+				chomp( $file );
+				next if defined( $excluded_patterns ) && $file =~ /$excluded_patterns/;
+				next unless $file =~ m/^lib[\\\/](.*)\.pm$/;
+				
+				my $module = $1;
+				$module =~ s/[\\\/]/::/g;
+				push( @$modules, $module );
+			}
+			close( $MANIFEST );
+		}
 	}
-	close( $MANIFEST );
 	
 	return $modules;
 }
