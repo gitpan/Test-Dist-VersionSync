@@ -4,7 +4,7 @@
       "Guillaume Aubert <aubertg@cpan.org>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "Module::Build version 0.4, CPAN::Meta::Converter version 2.120530",
+   "generated_by" : "Module::Build version 0.4003, CPAN::Meta::Converter version 2.120921",
    "license" : [
       "artistic_1"
    ],
@@ -17,9 +17,7 @@
       "build" : {
          "requires" : {
             "Carp" : "0",
-            "Data::Dumper" : "0",
-            "Test::Builder::Tester" : "0",
-            "Test::More" : "0.94"
+            "Test::Builder::Tester" : "0"
          }
       },
       "configure" : {
@@ -29,6 +27,8 @@
       },
       "runtime" : {
          "requires" : {
+            "Data::Dumper" : "0",
+            "Test::More" : "0.94",
             "perl" : "5.006"
          }
       }
@@ -36,7 +36,7 @@
    "provides" : {
       "Test::Dist::VersionSync" : {
          "file" : "lib/Test/Dist/VersionSync.pm",
-         "version" : "v1.0.3"
+         "version" : "v1.0.4"
       }
    },
    "release_status" : "stable",
@@ -46,11 +46,11 @@
       },
       "homepage" : "https://metacpan.org/release/Test-Dist-VersionSync",
       "license" : [
-         "http://opensource.org/licenses/artistic-license.php"
+         "http://www.perlfoundation.org/artistic_license_1_0"
       ],
       "repository" : {
-         "url" : "https://sourceforge.net/p/perldistversion/code"
+         "url" : "https://github.com/guillaumeaubert/Test-Dist-VersionSync"
       }
    },
-   "version" : "v1.0.3"
+   "version" : "v1.0.4"
 }
