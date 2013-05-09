@@ -1,4 +1,5 @@
 .perlcriticrc
+.travis.yml
 Build.PL
 Changes
 LICENSE
@@ -7,7 +8,8 @@ MANIFEST.SKIP
 META.json
 META.yml
 Makefile.PL
-README
+README.md
+examples/examples.txt
 ignore.txt
 lib/Test/Dist/VersionSync.pm
 t/00-load.t
@@ -34,7 +36,11 @@ t/25-ok_versions-missing_version.t
 t/25-ok_versions-missing_version/MANIFEST
 t/25-ok_versions-missing_version/lib/TestModule1.pm
 t/25-ok_versions-missing_version/lib/TestModule2.pm
-t/manifest.t
-t/perlcritic.t
-t/pod-coverage.t
-t/pod.t
+xt/changes.t
+xt/kwalitee.t
+xt/manifest.t
+xt/module_versions.t
+xt/perlcritic.t
+xt/pod-coverage.t
+xt/pod.t
+xt/unix_eol.t

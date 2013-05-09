@@ -14,11 +14,11 @@ Test::Dist::VersionSync - Verify that all the modules in a distribution have the
 
 =head1 VERSION
 
-Version 1.1.0
+Version 1.1.1
 
 =cut
 
-our $VERSION = '1.1.0';
+our $VERSION = '1.1.1';
 
 
 =head1 SYNOPSIS
@@ -276,9 +276,10 @@ Guillaume Aubert, C<< <aubertg at cpan.org> >>.
 
 =head1 BUGS
 
-Please report any bugs or feature requests to C<bug-test-dist-versionsync at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=test-dist-versionsync>.  I will be notified, and then you'll
-automatically be notified of progress on your bug as I make changes.
+Please report any bugs or feature requests through the web interface at
+L<https://github.com/guillaumeaubert/Test-Dist-VersionSync/issues/new>.
+I will be notified, and then you'll automatically be notified of progress on
+your bug as I make changes.
 
 
 =head1 SUPPORT
@@ -292,36 +293,28 @@ You can also look for information at:
 
 =over
 
-=item *
+=item * GitHub's request tracker
 
-RT: CPAN's request tracker
+L<https://github.com/guillaumeaubert/Test-Dist-VersionSync/issues>
 
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=test-dist-versionsync>
-
-=item *
-
-AnnoCPAN: Annotated CPAN documentation
+=item * AnnoCPAN: Annotated CPAN documentation
 
 L<http://annocpan.org/dist/test-dist-versionsync>
 
-=item *
-
-CPAN Ratings
+=item * CPAN Ratings
 
 L<http://cpanratings.perl.org/d/test-dist-versionsync>
 
-=item *
+=item * MetaCPAN
 
-Search CPAN
-
-L<http://search.cpan.org/dist/test-dist-versionsync/>
+L<https://metacpan.org/release/Test-Dist-VersionSync>
 
 =back
 
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2012 Guillaume Aubert.
+Copyright 2012-2013 Guillaume Aubert.
 
 This program is free software: you can redistribute it and/or modify it under
 the terms of the GNU General Public License version 3 as published by the Free
